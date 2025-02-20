@@ -28,20 +28,6 @@ console.log("computerChoice:", computerChoice);
 // Instead of a random number, a player will select one of 3 options as soon as the page loads // 
 // This will be done via a prompt //
 
-function getPlayerChoice() {
-  let playerChoice = prompt("Please choose Rock, Paper, or Scissors").toLowerCase();
-
-  if (playerChoice === "") {
-    alert("Please enter either Rock, Paper or Scissors")
-    prompt("Choose Rock, Paper, Scissors")
-  }
-
-  return playerChoice;
-}
-
-let playerChoice = getPlayerChoice();
-console.log("playerChoice:", playerChoice);
-
 // Players are immediately prompted to enter Rock, Paper, Scissors upon landing on the page //
 
 //Step 4: Setting up Score Variables //
@@ -95,70 +81,68 @@ playRound(humanSelection, computerSelection);
 // If the score is tied at the end of the game, then the function will be called one last time to determine the winner //
 // Some functions might be reworked to be more useful // 
 
-let roundNumber = 1;
+let rockButton = document.querySelector("#Rock");
+let paperButton = document.querySelector("#Paper");
+let scissorsButton = document.querySelector("#Scissors");
+let results = document.querySelector("#results")
+let scoreSection = document.querySelector("#score");
+
 
 function playGame() {
   let playerScore = 0;
   let computerScore = 0;
-  const humanSelection = playerChoice;
-  const computerSelection = computerChoice;
+  let result = "";
+  let scoreSection = "";
+  let humanSelection;
+  let computerSelection = computerChoice;
   playRound(humanSelection, computerSelection);
 
-  while (roundNumber < 5) {
-    console.log("New Round!")
-    roundNumber++
-    console.log(roundNumber);
-    computerChoice = getComputerChoice().toLowerCase();
-    console.log("Computer Chose:", computerChoice);
-    getPlayerChoice();
-    console.log("playerChoice:", playerChoice)
-    playRound();
-  }
+  rockButton.addEventListener("click", () => {
+    playRound("Rock", getComputerChoice());
+  });
+
+  paperButton.addEventListener("click", () => {
+    playRound("Paper", getComputerChoice());
+  });
+
+  scissorsButton.addEventListener("click", () => {
+    playRound("Scissors", getComputerChoice());
+  });
+
 
   function playRound(humanSelection, computerSelection){
-    if (humanSelection == "Rock" && computerSelection == "Scissors") {
-      playerScore++
-      console.log("Player Score:", playerScore, "Computer Score:", computerScore)
-      return console.log("You win! Rock beats Scissors.");
-    } else if (humanSelection == "Paper" && computerSelection == "Rock") {
-      playerScore++
-      console.log("Player Score:", playerScore, "Computer Score:", computerScore)
-      return console.log("You win! Paper beats Rock.")
-    } else if (humanSelection == "Scissors" && computerSelection == "Paper") {
-      playerScore++
-      console.log("Player Score:", playerScore, "Computer Score:", computerScore)
-      return console.log("You win! Scissors beats Paper.")
-    } else if (computerSelection == "Rock" && humanSelection == "Scissors") {
-      computerScore++
-      console.log("Player Score:", playerScore, "Computer Score:", computerScore)
-      return console.log("You lose! Rock beats Scissors.")
-    } else if (computerSelection == "Paper" && humanSelection == "Rock") {
-      computerScore++
-      console.log("Player Score:", playerScore, "Computer Score:", computerScore)
-      return console.log("You lose! Paper beats Rock.")
-    } else if (computerSelection == "Scissors" && humanSelection == "Paper") {
-      computerScore++
-      console.log("Player Score:", playerScore, "Computer Score:", computerScore)
-      return console.log("You lose! Scissors beats Paper.")
-    } else if (computerSelection == humanSelection) {
-      console.log("Player Score:", playerScore, "Computer Score:", computerScore)
-      return console.log("It's a tie! You both chose the same thing.");
-    } 
+    if (humanSelection === "Rock" && computerSelection === "Scissors") {
+      result = "win";
+      results.textContent = "You win! Rock beats Scissors"
+  } else if (humanSelection === "Paper" && computerSelection === "Rock") {
+      result = "win";
+      results.textContent = "You win! Paper beats Rock"
+  } else if (humanSelection === "Scissors" && computerSelection === "Paper") {
+    result = "win";
+    results.textContent = "You win! Scissors beats Paper";
+  } else if (humanSelection === "Rock" && computerSelection === "Paper") {
+    result = "lose";
+    results.textContent = "You lose! Paper beats Rock"
+  } else if (humanSelection === "Paper" && computerSelection === "Scissors") {
+    result = "lose";
+    results.textContent = "You lose! Scissors beats Paper"
+  } else if (humanSelection === "Scissors" && computerSelection === "Rock") {
+    result = "lose";
+    results.textContent = "You lose! Rock beats Scissors";
+  } else if (humanSelection !== undefined && computerChoice !== undefined){
+    result = "tie";
   }
 
-  if(playerScore === 3){
-    console.log("Player Score:", playerScore, "Computer Score:", computerScore)
-    return console.log("You win")
-  } else if (computerScore === 3){
-    console.log("Player Score:", playerScore, "Computer Score:", computerScore)
-    return console.log("You lose")
-  } else if (playerScore === computerScore && roundNumber === 5){
-    console.log("Player Score:", playerScore, "Computer Score:", computerScore)
-    console.log("Time for a tiebreaker round! Winner takes all")
-    playRound();
-  } else if (playerScore === computerScore){
-    console.log("Player Score:", playerScore, "Computer Score:", computerScore)
-    return console.log("Game Over! It's a tie.")
+    if (result === "win"){
+      playerScore++
+      scoreSection.textContent = `Player: ${playerScore} Computer: ${computerScore}`;
+    } else if (result === "tie"){
+      results.textContent = "Its a tie! Play Again";
+      scoreSection.textContent = `Player: ${playerScore} Computer: ${computerScore}`;
+    } else {
+      computerScore++;
+      scoreSection.textContent = `Player: ${playerScore} Computer: ${computerScore}`;
+    }
   }
 }
 
