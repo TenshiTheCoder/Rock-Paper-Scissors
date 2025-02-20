@@ -86,16 +86,13 @@ let paperButton = document.querySelector("#Paper");
 let scissorsButton = document.querySelector("#Scissors");
 let results = document.querySelector("#results")
 let scoreSection = document.querySelector("#score");
-
+let playerScore = 0;
+let computerScore = 0;
 
 function playGame() {
-  let playerScore = 0;
-  let computerScore = 0;
   let result = "";
-  let scoreSection = "";
   let humanSelection;
-  let computerSelection = computerChoice;
-  playRound(humanSelection, computerSelection);
+  let computerSelection;
 
   rockButton.addEventListener("click", () => {
     playRound("Rock", getComputerChoice());
@@ -119,13 +116,13 @@ function playGame() {
       results.textContent = "You win! Paper beats Rock"
   } else if (humanSelection === "Scissors" && computerSelection === "Paper") {
     result = "win";
-    results.textContent = "You win! Scissors beats Paper";
+    results.textContent = "You win! Scissors beats Paper"
   } else if (humanSelection === "Rock" && computerSelection === "Paper") {
     result = "lose";
     results.textContent = "You lose! Paper beats Rock"
   } else if (humanSelection === "Paper" && computerSelection === "Scissors") {
     result = "lose";
-    results.textContent = "You lose! Scissors beats Paper"
+    results.textContent = "You lose! Scissors beats Paper"    
   } else if (humanSelection === "Scissors" && computerSelection === "Rock") {
     result = "lose";
     results.textContent = "You lose! Rock beats Scissors";
@@ -135,15 +132,34 @@ function playGame() {
 
     if (result === "win"){
       playerScore++
-      scoreSection.textContent = `Player: ${playerScore} Computer: ${computerScore}`;
+      scoreSection.textContent = `Player: ${playerScore} Computer: ${computerScore}`; 
+      console.log("Current scores: Player:", playerScore, "Computer:", computerScore);
+      if (playerScore === 5) {
+        results.textContent = "Congrats! You are the winner!";
+        computerScore = 0;
+        playerScore = 0;
+      } 
     } else if (result === "tie"){
-      results.textContent = "Its a tie! Play Again";
-      scoreSection.textContent = `Player: ${playerScore} Computer: ${computerScore}`;
+      results.textContent = "Its a tie! Play Again"
     } else {
       computerScore++;
-      scoreSection.textContent = `Player: ${playerScore} Computer: ${computerScore}`;
+      console.log("Current scores: Player:", playerScore, "Computer:", computerScore);
+      scoreSection.textContent = `Player: ${playerScore} Computer: ${computerScore}`; 
+      if (computerScore === 5) {
+      results.textContent = "You lose! Better luck next time!";
+      computerScore = 0;
+      playerScore = 0;
+  }
     }
   }
+
+  if (playerScore === 5) {
+    results.textContent = "Congrats! You are the winner!";
+  } else if (computerScore === 5) {
+    results.textContent = "You lose! Better luck next time!";
+  }
+
+  scoreSection.textContent = `Player: ${playerScore} Computer: ${computerScore}`;
 }
 
 playGame();
